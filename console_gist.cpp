@@ -46,10 +46,10 @@ int main() {
 		Message *tr = reinterpret_cast<Message*>(msg.data());
 		switch (tr->type) {
 			case NODE_DATA:
-				std::cout << std::left << "Node: " << setw(8) << tr->sid << " " << tr->parent
-                  << " " << tr->alt << " " << tr->kids << " " << tr->status
+				std::cout << std::left << "Node: " << setw(8) << tr->sid << " " << setw(8) << tr->parent
+                  << " " << setw(2) << tr->alt << " " << tr->kids << " " << tr->status
                   << "  thread: " << setw(2) << (int)tr->thread 
-                  << "  restart: " << static_cast<int>(tr->restart_id)
+                  << "  restart: " << setw(2) << static_cast<int>(tr->restart_id)
                   << "  time: " << setw(9) << tr->time
                   << "  label: " << tr->label << std::endl;
 			break;
