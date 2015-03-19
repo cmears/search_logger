@@ -1,2 +1,2 @@
 make cgist:
-	g++ console_gist.cpp -o cgist -lzmq
+	g++ console_gist.cpp -ggdb -o cgist -lzmq

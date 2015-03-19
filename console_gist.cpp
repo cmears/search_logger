@@ -17,7 +17,7 @@ enum MsgType {
 };
 
 struct Message {
-  static const int LABEL_SIZE = 16;
+  static const int LABEL_SIZE = 32;
 
   MsgType type;
   int sid;
@@ -29,6 +29,7 @@ struct Message {
   unsigned long long time;
   char thread;
   char label[LABEL_SIZE];
+  float domain;
 };
 
 int main() {
@@ -51,6 +52,7 @@ int main() {
                   << "  thread: " << setw(2) << (int)tr->thread 
                   << "  restart: " << setw(2) << static_cast<int>(tr->restart_id)
                   << "  time: " << setw(9) << tr->time
+                  << "  domain: " << setw(3) << tr->domain
                   << "  label: " << tr->label << std::endl;
 			break;
 			case DONE_SENDING:
