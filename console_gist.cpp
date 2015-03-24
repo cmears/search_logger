@@ -1,6 +1,7 @@
 #include <zmq.hpp>
 #include <string>
 #include <iostream>
+#include <cstdio>
 #include <iomanip>
 #ifndef _WIN32
 #include <unistd.h>
@@ -40,11 +41,28 @@ int main() {
   std::cout << "listening to port: 6565\n";
 	int total = 0;
 
-	while (true) {
-		zmq::message_t msg;
+  char raw_data[80] = {0};
 
+	while (true) {
+	
+    zmq::message_t msg;
+  
 		receiver.recv(&msg);
+
+    // std::memcpy(raw_data, msg.data(), sizeof(msg.data()));
+    std::memcpy(raw_data, msg.data(), 80);
 		Message *tr = reinterpret_cast<Message*>(msg.data());
+
+    // std::cout << "raw: ";
+
+    // for (int i = 0; i < 80; i++)
+    // {
+    //     if (i > 0) printf(":");
+    //     printf("%02X", raw_data[i]);
+    // }
+
+    // std::cout << std::endl;
+
 		switch (tr->type) {
 			case NODE_DATA:
 				std::cout << std::left << "Node: " << setw(8) << tr->sid << " " << setw(8) << tr->parent
@@ -52,7 +70,7 @@ int main() {
                   << "  thread: " << setw(2) << (int)tr->thread 
                   << "  restart: " << setw(2) << static_cast<int>(tr->restart_id)
                   << "  time: " << setw(9) << tr->time
-                  << "  domain: " << setw(3) << tr->domain
+                  << "  domain: " << setw(6) << std::setprecision(4) << tr->domain
                   << "  label: " << tr->label << std::endl;
 			break;
 			case DONE_SENDING:
