@@ -9,31 +9,11 @@
 #include <windows.h>
 #endif
 
-using std::setw;
-
-enum MsgType {
-  NODE_DATA = 1,
-  DONE_SENDING = 2,
-  START_SENDING = 3
-};
-
-struct Message {
-  static const int LABEL_SIZE = 32;
-
-  MsgType type;
-  int sid;
-  int parent;
-  int alt;
-  int kids;
-  int status;
-  int restart_id;
-  unsigned long long time;
-  char thread;
-  char label[LABEL_SIZE];
-  float domain;
-};
+#include "message.pb.h"
 
 int main() {
+
+  using std::setw;
 
 	zmq::context_t context(1);
 	zmq::socket_t receiver (context, ZMQ_PULL);
@@ -49,37 +29,31 @@ int main() {
   
 		receiver.recv(&msg);
 
-    // std::memcpy(raw_data, msg.data(), sizeof(msg.data()));
-    std::memcpy(raw_data, msg.data(), 80);
-		Message *tr = reinterpret_cast<Message*>(msg.data());
+    message::Node node;
+    node.ParseFromArray(msg.data(), msg.size());
 
-    // std::cout << "raw: ";
+    if (node.type() == message::Node::NODE) {
+      std::cout << std::left
+          << "Node: "      << setw(8) << node.sid() << " " << setw(8) << node.pid()
+          << " " << setw(2) << node.alt() << " " << node.kids() << " " << node.status()
+          << "  thread: "  << setw(2) << node.thread_id()
+          << "  restart: " << setw(2) << node.restart_id()
+          << "  time: "    << setw(9) << node.time()
+          << "  domain: "  << setw(6) << std::setprecision(4) << node.domain_size()
+          << "  label: "   << node.label() << std::endl;
 
-    // for (int i = 0; i < 80; i++)
-    // {
-    //     if (i > 0) printf(":");
-    //     printf("%02X", raw_data[i]);
-    // }
+      continue;
+    }
 
-    // std::cout << std::endl;
+    if (node.type() == message::Node::DONE) {
+      std::cout << "Done receiving\n";
+      continue;
+    }
 
-		switch (tr->type) {
-			case NODE_DATA:
-				std::cout << std::left << "Node: " << setw(8) << tr->sid << " " << setw(8) << tr->parent
-                  << " " << setw(2) << tr->alt << " " << tr->kids << " " << tr->status
-                  << "  thread: " << setw(2) << (int)tr->thread 
-                  << "  restart: " << setw(2) << static_cast<int>(tr->restart_id)
-                  << "  time: " << setw(9) << tr->time
-                  << "  domain: " << setw(6) << std::setprecision(4) << tr->domain
-                  << "  label: " << tr->label << std::endl;
-			break;
-			case DONE_SENDING:
-				std::cout << "Done receiving\n";
-			break;
-      case START_SENDING:
-        std::cout << "Start recieving, restart: " << tr->restart_id << "\n";
-      break;
-		}
+    if (node.type() == message::Node::START) {
+      std::cout << "Start recieving, restart: " << node.restart_id() << " name: " << node.label() << " \n";
+      continue;
+    }
 			
 	}
 	return 0;

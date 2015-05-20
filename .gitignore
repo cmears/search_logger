@@ -1,2 +1,4 @@
 cgist
 *.o
+message.pb.cc
+message.pb.h
