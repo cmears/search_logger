@@ -32,4 +32,5 @@ message Node {
   optional int32  thread_id   = 9;
   optional string label       = 10;
   optional float  domain_size = 11;
+  optional string solution    = 12;
 }

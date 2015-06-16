@@ -42,6 +42,14 @@ int main() {
           << "  domain: "  << setw(6) << std::setprecision(4) << node.domain_size()
           << "  label: "   << node.label() << std::endl;
 
+      if (node.status() == 0) { /// solution!
+        std::cout << "-----solution-----\n";
+        std::cout << node.solution();
+        std::cout << "------------------\n";
+
+
+      }
+
       continue;
     }
 
