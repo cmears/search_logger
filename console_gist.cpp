@@ -9,7 +9,7 @@
 #include <windows.h>
 #endif
 
-#include "message.pb.h"
+#include "message.pb.hh"
 
 int main() {
 
@@ -40,7 +40,8 @@ int main() {
           << "  restart: " << setw(2) << node.restart_id()
           << "  time: "    << setw(9) << node.time()
           << "  domain: "  << setw(6) << std::setprecision(4) << node.domain_size()
-          << "  label: "   << node.label() << std::endl;
+          << "  label: "   << setw(14) << node.label()
+          << "  nogood: "  << node.nogood() << std::endl;
 
       if (node.status() == 0) { /// solution!
         std::cout << "-----solution-----\n";
