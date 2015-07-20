@@ -42,6 +42,9 @@ int main() {
           << "  domain: "  << setw(6) << std::setprecision(4) << node.domain_size()
           << "  label: "   << setw(14) << node.label()
           << "  nogood: "  << node.nogood() << std::endl;
+      if (node.has_info() && node.info().length() > 0) {
+          std::cout << "  info: "    << node.info() << std::endl;
+      }
 
       if (node.status() == 0) { /// solution!
         std::cout << "-----solution-----\n";
