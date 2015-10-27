@@ -19,9 +19,6 @@ int main() {
 	zmq::socket_t receiver (context, ZMQ_PULL);
 	receiver.bind("tcp://*:6565");
   std::cout << "listening to port: 6565\n";
-	int total = 0;
-
-  char raw_data[80] = {0};
 
 	while (true) {
 	
@@ -38,20 +35,24 @@ int main() {
           << " " << setw(2) << node.alt() << " " << node.kids() << " " << node.status()
           << "  thread: "  << setw(2) << node.thread_id()
           << "  restart: " << setw(2) << node.restart_id()
-          << "  time: "    << setw(9) << node.time()
-          << "  domain: "  << setw(6) << std::setprecision(4) << node.domain_size()
-          << "  label: "   << setw(14) << node.label()
-          << "  nogood: "  << node.nogood() << std::endl;
+          // << "  time: "    << setw(9) << node.time()
+          << "  label: "   << setw(14) << node.label();
+      if (node.has_domain_size() && node.domain_size() > 0) {
+          std::cout << "  domain: "  << setw(6) << std::setprecision(4) << node.domain_size();
+      }
+      if (node.has_nogood() && node.nogood().length() > 0) {
+          std::cout << "  nogood: "  << node.nogood();
+      }
       if (node.has_info() && node.info().length() > 0) {
           std::cout << "info:\n"    << node.info() << std::endl;
       }
+
+      std::cout << std::endl;
 
       if (node.status() == 0) { /// solution!
         std::cout << "-----solution-----\n";
         std::cout << node.solution();
         std::cout << "------------------\n";
-
-
       }
 
       continue;
