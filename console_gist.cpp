@@ -1,4 +1,3 @@
-#include <zmq.hpp>
 #include <string>
 #include <iostream>
 #include <cstdio>
@@ -9,6 +8,7 @@
 #include <windows.h>
 #endif
 
+#include "zmq.hpp"
 #include "message.pb.hh"
 
 int main() {
@@ -43,7 +43,7 @@ int main() {
           << "  label: "   << setw(14) << node.label()
           << "  nogood: "  << node.nogood() << std::endl;
       if (node.has_info() && node.info().length() > 0) {
-          std::cout << "  info: "    << node.info() << std::endl;
+          std::cout << "info:\n"    << node.info() << std::endl;
       }
 
       if (node.status() == 0) { /// solution!

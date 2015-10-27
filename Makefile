@@ -10,8 +10,5 @@ console_gist.o: console_gist.cpp
 	$(CC) $(CFLAGS) console_gist.cpp -o console_gist.o
 message.pb.o: message.pb.cpp message.pb.hh
 	g++ -c message.pb.cpp -o message.pb.o
-# message.pb.cc: message.proto
-# 	protoc -I=. --cpp_out=. message.proto
-
 clean:
 	rm -f *.o cgist message.pb.cc
