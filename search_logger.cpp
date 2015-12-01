@@ -39,7 +39,7 @@ int main() {
             int msg_length = nn_recv(nanosocket, &buf, NN_MSG, 0);
             
 
-                usleep(10000);
+                //usleep(10000);
 
     message::Node node;
     node.ParseFromArray(buf, msg_length);
